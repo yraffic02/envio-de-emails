@@ -3,7 +3,6 @@ import AuthController from '../controllers/AuthController.mjs';
 
 const AuthRouter = Router();
 
-AuthRouter.get('/register', AuthController.getAll);
-AuthRouter.get('/login', AuthController.getAll);
+AuthRouter.post('/login', AuthController.login);
 
 export default AuthRouter;
