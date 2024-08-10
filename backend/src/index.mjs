@@ -3,7 +3,7 @@ import env from 'dotenv'
 env.config()
 import express from 'express'
 import cors from 'cors'
-import db from './models/index.mjs';
+import process from 'process';
 import router from './configs/routes.mjs';
 
 const app = express();
