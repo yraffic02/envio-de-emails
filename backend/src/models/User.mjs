@@ -29,21 +29,7 @@ export default (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'User',
-  });
-
-  User.beforeCreate(async (user) => {
-    user.password = await bcrypt.hash(user.password, 10).then((hash) => {
-      return hash;
-    });
-  });
-
-  User.beforeUpdate(async (user) => {
-    if (user.changed('password')) {
-      user.password = await bcrypt.hash(user.password, 10).then((hash) => {
-        return hash;
-      });
-    }
+    modelName: 'Users',
   });
 
   User.addScope('defaultScope', {
