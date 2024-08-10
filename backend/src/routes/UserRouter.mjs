@@ -3,6 +3,6 @@ import UserController from '../controllers/UserController.mjs';
 
 const UserRouter = Router();
 
-UserRouter.get('/register', UserController.create);
+UserRouter.post('/register', UserController.create);
 
 export default UserRouter;
