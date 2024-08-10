@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 
 export default (sequelize, DataTypes) => {
   class User extends Model {
-    static associate(models) {}
+    static associate() {}
   }
   User.init({
     name:{ 
@@ -30,6 +30,16 @@ export default (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Users',
+  });
+
+  User.beforeCreate(async (user) => {
+    user.password = await bcrypt.hash(user.password.toString(), 10);
+  });
+
+  User.beforeUpdate(async (user) => {
+    if (user.changed('password')) {
+      user.password = await bcrypt.hash(user.password.toString(), 10);
+    }
   });
 
   User.addScope('defaultScope', {

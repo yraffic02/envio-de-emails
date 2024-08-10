@@ -1,5 +1,4 @@
 import db from '../models/index.mjs'
-import bcrypt from 'bcrypt'
 import { CrudHelper } from '../utils/crudHelper.mjs';
 
 const UserService = {
@@ -10,13 +9,11 @@ const UserService = {
         if(!name || !email || !password || !username){
             throw new Error('Todos os dados são obrigatórios!')
         }
-        
-        const hash = await bcrypt.hash(password.toString(), 10)
 
         return await crudHelper({ 
             name, 
             email, 
-            password: hash, 
+            password, 
             username
         })
      } catch (error) {
