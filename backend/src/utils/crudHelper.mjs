@@ -22,9 +22,13 @@ export function CrudHelper({
         throw new Error(`Erro ao buscar registro: ${error.message}`);
       }
     },
-    FindAll: async (query = {}) => {
+    FindAll: async (query = {}, unscoped = false) => {
       try {
-        return await dbInstance.findAll({ where: query });
+        if(unscoped){
+          return await dbInstance.unscoped().findAll({ where: query });
+        } else {
+          return await dbInstance.findAll({ where: query });
+        }
       } catch (error) {
         throw new Error(`Erro ao buscar todos os registros: ${error.message}`);
       }
