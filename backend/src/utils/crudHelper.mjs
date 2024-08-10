@@ -58,20 +58,20 @@ export function CrudHelper({
   
   const nameFunctions = [ 'FindOne', 'FindAll', 'Create', 'Update', 'Delete'];
   
-  const newService = { ...service } 
+  const returnedService = { ...service } 
 
   Object.keys(functions).forEach((key) => {
     if (nameFunctions.includes(key)) {
       const crudHelper = functions[key];
 
-      if (newService[key]) {
-        newService[key] = (req, res) => service[key](req, res, crudHelper);
+      if (returnedService[key]) {
+        returnedService[key] = (req, res) => service[key](req, res, crudHelper);
       } else {
-        newService[key] = crudHelper;
+        returnedService[key] = crudHelper;
       }
     }
   });
   
-  return newService;
+  return returnedService;
 }
   
