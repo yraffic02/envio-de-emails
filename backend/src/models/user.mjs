@@ -33,27 +33,16 @@ export default (sequelize, DataTypes) => {
   });
 
   User.beforeCreate(async (user) => {
-    const password = await bcrypt.hash(user.password, 10).then((hash) => {
-      hash.replace(/^\$2b/, '$2y')
+    user.password = await bcrypt.hash(user.password, 10).then((hash) => {
+      return hash;
     });
-
-    const newUser = user;
-
-    newUser.password = password;
-
-    return newUser;
   });
 
   User.beforeUpdate(async (user) => {
     if (user.changed('password')) {
-      const password = await bcrypt.hash(user.password, 10)
-        .then((hash) => hash.replace(/^\$2b/, '$2y'));
-  
-      const newUser = user;
-  
-      newUser.password = password;
-  
-      return newUser;
+      user.password = await bcrypt.hash(user.password, 10).then((hash) => {
+        return hash;
+      });
     }
   });
 
