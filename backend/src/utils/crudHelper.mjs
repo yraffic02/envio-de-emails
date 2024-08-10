@@ -1,34 +1,40 @@
-import db from '../models/index.mjs'
+export function CrudHelper({ 
+  dbInstance,
+  service
+}) {
+  if(!service){
+    throw new Error('Db instance é obrigatorio');
+  }
 
-export class CrudHelper {
-
-    constructor(model) {
-      this.model = db[model];
-    }
+  if(!service){
+    throw new Error('Objeto service é obrigatorio');
+  }
   
-    async findOne(query) {
-        return await this.model.findOne({ where: query });
-    }
-  
-    async findAll(query = {}) {
+  const functions = {
+    FindOne: async(query) => {
       try {
-        return await this.model.findAll({ where: query });
+        return await dbInstance.findOne({ where: query });
+      } catch (error) {
+        throw new Error(`Erro ao buscar registro: ${error.message}`);
+      }
+    },
+    FindAll: async (query = {}) => {
+      try {
+        return await dbInstance.findAll({ where: query });
       } catch (error) {
         throw new Error(`Erro ao buscar todos os registros: ${error.message}`);
       }
-    }
-  
-    async create(data) {
+    },
+    Create: async (data) => {
       try {
-        return await this.model.create(data);
+        return await dbInstance.create(data);
       } catch (error) {
         throw new Error(`Erro ao criar o registro: ${error.message}`);
       }
-    }
-  
-    async update(query, data) {
+    },
+    Update: async (query, data)=>{
       try {
-        const [updated] = await this.model.update(data, { where: query });
+        const [updated] = await dbInstance.update(data, { where: query });
         if (!updated) {
           throw new Error('Registro não encontrado ou dados não alterados');
         }
@@ -36,11 +42,10 @@ export class CrudHelper {
       } catch (error) {
         throw new Error(`Erro ao atualizar o registro: ${error.message}`);
       }
-    }
-  
-    async delete(query) {
+    },
+    Delete: async (query) => {
       try {
-        const deleted = await this.model.destroy({ where: query });
+        const deleted = await dbInstance.destroy({ where: query });
         if (!deleted) {
           throw new Error('Registro não encontrado');
         }
@@ -50,4 +55,23 @@ export class CrudHelper {
       }
     }
   }
+  
+  const nameFunctions = [ 'FindOne', 'FindAll', 'Create', 'Update', 'Delete'];
+  
+  const newService = { ...service } 
+
+  Object.keys(functions).forEach((key) => {
+    if (nameFunctions.includes(key)) {
+      const crudHelper = functions[key];
+
+      if (newService[key]) {
+        newService[key] = (req, res) => service[key](req, res, crudHelper);
+      } else {
+        newService[key] = crudHelper;
+      }
+    }
+  });
+  
+  return newService;
+}
   
