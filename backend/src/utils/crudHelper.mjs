@@ -11,9 +11,13 @@ export function CrudHelper({
   }
   
   const functions = {
-    FindOne: async(query) => {
+    FindOne: async(query, unscoped = false) => {
       try {
-        return await dbInstance.findOne({ where: query });
+        if(unscoped){
+          return await dbInstance.unscoped().findOne({ where: query });
+        } else {
+          return await dbInstance.findOne({ where: query });
+        }
       } catch (error) {
         throw new Error(`Erro ao buscar registro: ${error.message}`);
       }
