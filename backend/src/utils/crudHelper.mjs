@@ -1,14 +1,13 @@
+import db from '../models/index.mjs'
+
 export class CrudHelper {
+
     constructor(model) {
-      this.model = model;
+      this.model = db[model];
     }
   
     async findOne(query) {
-      try {
         return await this.model.findOne({ where: query });
-      } catch (error) {
-        throw new Error(`Erro ao buscar o registro: ${error.message}`);
-      }
     }
   
     async findAll(query = {}) {
