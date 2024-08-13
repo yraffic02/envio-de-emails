@@ -13,3 +13,6 @@ export const accordionConstants: AccordionProps = {
         },
     ]
 };
+
+
+export const publicRoutes = ['/', '/auth/login', '/auth/register', '/auth/totp'];

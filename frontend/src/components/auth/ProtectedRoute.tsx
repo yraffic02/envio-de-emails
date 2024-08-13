@@ -3,6 +3,7 @@ import { getToken } from "@/utils/localStorage";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import { toast } from "@/components/ui/use-toast"
+import { publicRoutes } from "@/configs/constants";
 
 export default function ProtectedRoute({
     children,
@@ -14,12 +15,14 @@ export default function ProtectedRoute({
     const pathname = usePathname();
 
     useEffect(() => {
-        if (!token) {
+        const isPublicRouter = publicRoutes.includes(pathname);
+
+        if (!token && !isPublicRouter) {
             router.push('/auth/login');
             toast({
-                title: "Login efetuado!",
+                title: "Faça seu login",
             });
-        } else if (token && (pathname === '/' || pathname.startsWith('/auth'))) {
+        } else if (token && isPublicRouter) {
             router.push('/home');
         }
     }, [token, pathname])
