@@ -26,7 +26,9 @@ const modelFiles = fs
 
 const modelImports = modelFiles.map(async (file) => {
   const { default: model } = await import(path.join(__dirname, file));
-  db[model.name] = model(sequelize, Sequelize.DataTypes);
+  const modelInstance = model(sequelize, Sequelize.DataTypes);
+  db[modelInstance.name] = modelInstance;
+  console.log(`Model ${modelInstance.name} imported and initialized.`);
 });
 
 await Promise.all(modelImports);
