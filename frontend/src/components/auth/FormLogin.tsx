@@ -1,10 +1,7 @@
 "use client"
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-
-import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -16,11 +13,11 @@ import {
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import { FormComponent } from "../utils/FormComponent"
-
-const FormSchema = z.object({
-    Email: z.string().email({ message: "Invalid email address." }),
-    Password: z.string().min(6, { message: "Password must be at least 6 characters." }),
-})
+import { api } from "@/lib/api"
+import { useRouter } from "next/navigation"
+import { AxiosError } from "axios"
+import { setToken } from "@/utils/localStorage"
+import { FormSchema } from "@/utils/schemas/FormLoginSchema"
 
 export function FormLogin() {
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -30,16 +27,40 @@ export function FormLogin() {
       Password: ""
     },
   })
+  const router = useRouter()
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    try {
+      const { status, data: response } = await api.post('/auth/login', {
+        email: data.Email,
+        password: data.Password,
+      });
+      console.log(status);
+
+      if (status === 200 && response?.token) {
+        setToken(response.token)
+
+        toast({
+          title: "Login efetuado!",
+        });
+
+        router.push('/home');
+      } else if (status === 200 && response?.totp) {
+        router.push('/auth/totp');
+      }
+    } catch (error: any) {
+      if (error instanceof AxiosError) {
+        toast({
+          title: "Erro no Login!",
+          description: error?.response?.data.message,
+        });
+      } else {
+        toast({
+          title: "Erro no Login!",
+          description: "Algo deu errado. Tente novamente mais tarde.",
+        });
+      }
+    }
   }
 
   return (
