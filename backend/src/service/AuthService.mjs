@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import process from 'process';
 import UserService from "../service/UserService.mjs";
+import TotpAuthService from './TotpAuthService.mjs';
 
 const AuthService = {
     generateToken: (user, expiresIn = process.env.EXPIRESIN) => {
@@ -11,7 +12,7 @@ const AuthService = {
             { expiresIn }
         );
 
-        return { token, user };
+        return { token };
     },
     verifyCredentials: async (req) => {
         const { email, password } = req.body;
@@ -24,28 +25,31 @@ const AuthService = {
         const user = await UserService.FindOne({ email }, unscoped);
 
         if (!user) {
-            throw new Error('Invalid credentials');
+            throw new Error('Email ou senha inválidos!');
         }
 
         const passwordMatch = await bcrypt.compare(password.toString(), user.password);
 
         if (!passwordMatch) {
-            throw new Error('Invalid credentials');
+            throw new Error('Email ou senha inválidos!');
         }
 
         return user;
     },
     login: async (req) => {
         const userAgent = req.headers['user-agent'] || 'unknown';
+        console.log(`Login attempt by ${userAgent}`);
 
         const user = await AuthService.verifyCredentials(req);
 
-        const { token } = await AuthService.generateToken(user);
+        const totp = await TotpAuthService.checkIfUserHastotp(user.id)
 
-        // You can also store the userAgent or log it if needed
-        console.log(`Login attempt by ${userAgent}`);
+        if(!totp){
+            const token = await AuthService.generateToken(user);
+            return token;
+        }
 
-        return { token, user };
+        return { totp }
     }
 };
 
