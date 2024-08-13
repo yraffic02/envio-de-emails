@@ -4,9 +4,7 @@ import { Inter as FontSans } from "next/font/google"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/Header/Header";
-import Navbar from "@/components/Navbar/Navbar";
 
- 
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -22,17 +20,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="pt-BR">
-      <body 
-         className={cn(
+      <body
+        className={cn(
           "h-screen bg-slate-100 font-sans antialiased",
           fontSans.variable
         )}
       >
-        <Header>
-          <Navbar />
-        </Header>
+        <Header />
         {children}
         <Toaster />
       </body>
