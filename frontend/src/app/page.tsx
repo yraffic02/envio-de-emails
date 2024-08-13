@@ -12,8 +12,7 @@ export default function Login() {
         <h1 className="font-bold">
           Bem-vindo ao nosso aplicativo de envio de emails para sua equipe!
           Nosso app oferece uma experiência de usuário moderna e fluida, com uma interface elegante e responsiva.
-          Priorizamos a segurança dos seus dados, implementando autenticação de dois fatores
-          e reconhecimento facial.
+          Priorizamos a segurança dos seus dados, implementando autenticação de dois fatores.
           O envio de emails é realizado com segurança,
           permitindo que você gerencie a comunicação da sua equipe de maneira eficiente e protegida.
         </h1>
