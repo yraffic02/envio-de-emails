@@ -4,6 +4,7 @@ import { Inter as FontSans } from "next/font/google"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/Header/Header";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -20,7 +21,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <html lang="pt-BR">
       <body
@@ -29,8 +29,10 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <Header />
-        {children}
+        <ProtectedRoute>
+          <Header />
+          {children}
+        </ProtectedRoute>
         <Toaster />
       </body>
     </html>
