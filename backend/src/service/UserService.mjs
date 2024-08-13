@@ -26,6 +26,6 @@ const UserService = {
 }
 
 export default CrudHelper({
-    dbInstance: db.sequelize.models.Users,
+    dbInstance: db.sequelize.models.User,
     service: UserService,
 });

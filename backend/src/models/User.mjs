@@ -1,11 +1,20 @@
-import { Model } from 'sequelize';
 import bcrypt from 'bcrypt';
+import { Model } from 'sequelize';
 
 export default (sequelize, DataTypes) => {
   class User extends Model {
-    static associate() {}
+    static associate(models) {
+      User.hasOne(models.TotpAuth)
+    }
   }
+
   User.init({
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     name:{ 
       type: DataTypes.STRING,
       allowNull: true
@@ -29,7 +38,7 @@ export default (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'Users',
+    modelName: 'User',
   });
 
   User.beforeCreate(async (user) => {
