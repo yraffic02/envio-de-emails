@@ -1,14 +1,27 @@
-import { Menubar } from "../ui/menubar";
-import { ReactNode  } from "react";
+'use client'
+import Link from "next/link";
+import { AtSign } from "lucide-react";
+import { usePathname } from "next/navigation";
 
-interface HeadarProps {
-    children: ReactNode;
-}
+export default function Header() {
+    const pathname = usePathname();
 
-export default function Header({ children }: HeadarProps){
-    return(
-    <Menubar className="bg-slate-950 justify-between p-4">
-        { children }
-    </Menubar>
-    )
+    if (pathname === '/' || pathname.includes('auth')) {
+        return (
+            <div className="w-full flex items-center justify-between p-2">
+                <Link href='/'>
+                    <AtSign />
+                </Link>
+                <div className="space-x-2">
+                    <Link href='/auth/login'>
+                        <strong>Login</strong>
+                    </Link>
+
+                    <Link href='/auth/register'>
+                        <strong> Registre-se</strong>
+                    </Link>
+                </div>
+            </div>
+        )
+    }
 }
