@@ -1,3 +1,7 @@
 export default function Home() {
-    return <div> <h1>oi</h1></div>
+    return (
+        <main className="h-full flex items-center justify-center">
+            <h1>Hello world</h1>
+        </main>
+    )
 }
