@@ -1,11 +1,13 @@
 import {ComponentType, ReactNode} from "react";
 import { Action } from "./constants";
 
+interface accordionObject {
+    title: string,
+    description: string,
+}
+
 export interface AccordionProps{
-    accordionObject: {
-        title: string,
-        description: string,
-    }[];
+    accordionObject: accordionObject[]
 }
 
 export interface LinkDropdown{
