@@ -22,6 +22,13 @@ export function CrudHelper({
         throw new Error(`Erro ao buscar registro: ${error.message}`);
       }
     },
+    FindByPk: async(primaryKey) => {
+      try {
+        return await dbInstance.findByPk(primaryKey);
+      } catch (error) {
+        throw new Error(`Erro ao buscar registro: ${error.message}`);
+      }
+    },
     FindAll: async (query = {}, unscoped = false) => {
       try {
         if(unscoped){
@@ -46,7 +53,7 @@ export function CrudHelper({
         if (!updated) {
           throw new Error('Registro não encontrado ou dados não alterados');
         }
-        return await this.findOne(query);
+        return await updated;
       } catch (error) {
         throw new Error(`Erro ao atualizar o registro: ${error.message}`);
       }

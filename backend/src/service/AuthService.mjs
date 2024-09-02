@@ -37,20 +37,33 @@ const AuthService = {
         return user;
     },
     login: async (req) => {
-        const userAgent = req.headers['user-agent'] || 'unknown';
-        console.log(`Login attempt by ${userAgent}`);
-
         const user = await AuthService.verifyCredentials(req);
 
         const totp = await TotpAuthService.checkIfUserHastotp(user.id)
-
-        if(!totp){
-            const token = await AuthService.generateToken(user);
-            return token;
+        
+        if(user.totp && totp){
+            return { totp: {
+                idUser: totp.user.id
+            } }   
         }
 
-        return { totp }
-    }
+        const token = await AuthService.generateToken(user);
+        
+        return token;
+    },
+    verifyToken: (token) => {
+        try {
+          const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    
+          return decodedToken;
+        } catch (error) {
+          if (error instanceof jwt.TokenExpiredError) {
+            throw new Error('Token expirado');
+          }
+    
+          throw new Error('Token inválido');
+        }
+      }
 };
 
 export default AuthService;

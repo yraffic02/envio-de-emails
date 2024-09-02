@@ -22,7 +22,7 @@ const UserService = {
         }
         throw new Error(error)
      }
-   }
+   },
 }
 
 export default CrudHelper({
