@@ -9,24 +9,31 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { AvatarComponent } from "../Avatar/Avatar"
 import Link from "next/link"
 import ButtonLogout from "../utils/ButtonLogout"
+import { linkDropdown } from "@/configs/constants"
+import { MenuIcon } from "lucide-react"
 
 export function Dropdown() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger>
-                <AvatarComponent />
+                <MenuIcon className="text-white" />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuLabel>Meu Perfil</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                    <Link href='/profile'>
-                        Perfil
-                    </Link>
-                </DropdownMenuItem>
+                {
+                    linkDropdown.map((link) => {
+                        return (
+                            <DropdownMenuItem key={link.name}>
+                                <Link href={link.link}>
+                                    {link.name}
+                                </Link>
+                            </DropdownMenuItem>
+                        )
+                    })
+                }
                 <DropdownMenuItem>
                     <ButtonLogout />
                 </DropdownMenuItem>
