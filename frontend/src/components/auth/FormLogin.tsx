@@ -46,7 +46,7 @@ export function FormLogin() {
 
         router.push('/home');
       } else if (status === 200 && response?.totp) {
-        router.push('/auth/totp');
+        router.push(`/auth/totp?id=${response?.totp.idUser}`);
       }
     } catch (error: any) {
       if (error instanceof AxiosError) {

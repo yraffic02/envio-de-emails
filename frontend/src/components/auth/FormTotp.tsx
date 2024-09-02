@@ -13,7 +13,7 @@ import {
 import { toast } from "@/components/ui/use-toast"
 import { FormComponent } from "../utils/FormComponent"
 import { api } from "@/lib/api"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { AxiosError } from "axios"
 import { setToken } from "@/utils/localStorage"
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "../ui/input-otp"
@@ -27,13 +27,20 @@ export function FormTotp() {
         },
     })
     const router = useRouter()
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id');
 
     async function onSubmit(data: z.infer<typeof FormTotpSchema>) {
         try {
-            const { status, data: response } = await api.post('/auth/totp', data);
+            const dataSubmit = {
+                ...data,
+                id
+            }
+
+            const { status, data: response } = await api.post('/totp/verifySecret', dataSubmit);
 
             if (status === 200 && response?.token) {
-                setToken(response.token)
+                setToken(response.token.token)
 
                 toast({
                     title: "TOTP verificado com sucesso!",
@@ -63,7 +70,7 @@ export function FormTotp() {
                     control={form.control}
                     name="otpCode"
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="flex flex-col items-center justify-center">
                             <FormLabel>Código TOTP</FormLabel>
                             <FormControl>
                                 <InputOTP maxLength={6} onChange={field.onChange} value={field.value}>
