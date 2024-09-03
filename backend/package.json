@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon ./src/index.mjs",
+    "start": "NODE_ENV=production node ./src/index.mjs",
+    "dev": "NODE_ENV=development nodemon ./src/index.mjs",
     "migrate": "NODE_OPTIONS='--experimental-modules' npx sequelize-cli db:migrate",
     "migrate:undo": "npx sequelize-cli db:migrate:undo",
     "lint": "eslint .",
@@ -25,6 +26,8 @@
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.9.2",
     "otpauth": "^9.3.1",
+    "pg": "^8.12.0",
+    "pg-hstore": "^2.3.4",
     "qrcode": "^1.5.4",
     "sequelize": "^6.37.1"
   },
