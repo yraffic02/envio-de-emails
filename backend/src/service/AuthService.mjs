@@ -18,7 +18,7 @@ const AuthService = {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            throw new Error('Email and password are required');
+            throw new Error('Email e senha são obrigatórios');
         }
         const unscoped = true
         
